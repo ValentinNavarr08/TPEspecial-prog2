@@ -60,7 +60,7 @@ public class NodoUsuario {
         this.nombre = nombre;
     }
 
-    //TODO: crear nueva lista repro,
+    //TODO: crear nueva lista reproducciones,
     // agregar cancion por titulo a una lista de repro, agregar una cancion por autor (preguntar),
     // eliminar una lista de reprod propia,
     // incluir la lista de otro usuario (seguirlo)

@@ -6,8 +6,12 @@
 import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;
 public class Main {
+
+    private static int OPCION_MIN = 1;
+    private static int OPCION_MAX = 4;
+    private static Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
 
         ArbolUsuarios arbolUsuarios = new ArbolUsuarios();
         NodoCancion arbolCanciones = new NodoCancion();
@@ -20,30 +24,50 @@ public class Main {
         int opcion = 1;
 
         while (true) {
-            System.out.println("\n--- Menú Principal ---");
-            System.out.println("1. Login");
-            System.out.println("2. Nuevo Usuario");
-            System.out.println("3. Ver Usuarios existentes");
-            System.out.println("4. Salir");
-            System.out.print("Elige una opción: ");
+            imprimirMenu1();
 
             //TRY-CATCH (controlar que esté entre 1 y 4, inclusive)
             opcion = scanner.nextInt();
 
-            if (opcion == 1) {
-                loguearUsuario(arbolUsuarios, scanner);
-            } else if (opcion == 2) {
-                nuevoUsuario(arbolUsuarios, scanner);
-            } else if (opcion == 3) {
-                verUsuariosExistentes(arbolUsuarios);
-            } else if (opcion == 4) {
-                persistencia.guardarDatos(); //consultar con valen
-                System.exit(0);
+            switch (opcion) {
+                case 1: loguearUsuario(arbolUsuarios, scanner);break;
+                case 2: nuevoUsuario(arbolUsuarios, scanner);break;
+                case 3: verUsuariosExistentes(arbolUsuarios);break;
+                case 4: persistencia.guardarDatos();
+                    System.exit(0); break;
+                default: System.out.println("Algo Salió mal");break;
             }
+
         }
     }
 
-    private static void loguearUsuario(ArbolUsuarios arbolUsuarios, Scanner scanner) {
+    private static void imprimirMenu1() {
+        System.out.println("\n--- Menú Principal ---");
+        System.out.println("1. Login");
+        System.out.println("2. Nuevo Usuario");
+        System.out.println("3. Ver Usuarios existentes");
+        System.out.println("4. Salir");
+        System.out.print("Elige una opción: ");
+    }
+
+    public static int obtenerOpcionValida() {
+        int numero = -1;
+        while (!(numero >= OPCION_MIN && numero <= OPCION_MAX)) {
+            // si está dentro del rango
+            try {
+                numero = scanner.nextInt();
+                System.out.println();
+            } catch (Exception e) {
+                System.out.println("Opción inválida, intente de nuevo: ");
+                scanner.next();
+            }
+        }
+        return numero;
+    }
+
+
+
+    private static void loguearUsuario(ArbolUsuarios arbolUsuarios) {
         String nombre = scanner.nextLine();
         String password = scanner.nextLine();
 
@@ -56,7 +80,7 @@ public class Main {
         }
     }
 
-    private static void nuevoUsuario (ArbolUsuarios arbolUsuarios, Scanner scanner) {
+    private static void nuevoUsuario (ArbolUsuarios arbolUsuario) {
         String nombre = scanner.nextLine();
         String password = scanner.nextLine();
 
@@ -90,6 +114,8 @@ public class Main {
             //TRY-CATCH (controlar rango de 1 a 7)
             int opcion = scanner.nextInt();
 
+
+            //TODO: switch
             if(opcion == 1) {
                 datosCancion(arbolUsuarios, scanner, listaAutores);
             } else if (opcion == 2) {
