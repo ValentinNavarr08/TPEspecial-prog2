@@ -9,10 +9,14 @@ public class Persistencia {
     private static final String ARCHIVO_LISTAS_PROPIAS = "ArchListasPropias.ser";
     private static final String ARCHIVO_LISTAS_SEGUIDAS = "ArchListasSeguidas.ser";
 
-    private ArbUsuarios arbUsuarios;
-    private ArbCanciones arbCanciones;
-    private ListasPropias listasPropias;
-    private ListasSeguidos listasSeguidos;
+    //private ArbCanciones arbCanciones;
+    //private ListasPropias listasPropias;
+    //private ListasSeguidos listasSeguidos;
+
+    private ArbolUsuarios arbUsuarios;
+    private NodoCancion arbCanciones;
+    private ListaPropia listasPropias;
+    private ListaSeguidos listasSeguidos;
 
     public void cargarDatos() {
         arbUsuarios = cargarUsuarios();
@@ -28,91 +32,92 @@ public class Persistencia {
         guardarListasSeguidas(listasSeguidos);
     }
 
-    private ArbUsuarios cargarUsuarios() {
+    private ArbolUsuarios cargarUsuarios() {
         File archivo = new File(ARCHIVO_USUARIOS);
         if (archivo.exists()) {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
                 System.out.println("Archivo de usuarios encontrado. Deserializando...");
-                return (ArbUsuarios) ois.readObject();
+                return (ArbolUsuarios) ois.readObject();
             } catch (IOException | ClassNotFoundException e) {
                 System.err.println("Error al deserializar el archivo de usuarios.");
                 e.printStackTrace();
             }
         } else {
             System.out.println("Archivo de usuarios no encontrado. Creando archivo nuevo...");
-            crearArchivoVacio(ARCHIVO_USUARIOS, new ArbUsuarios());
+            crearArchivoVacio(ARCHIVO_USUARIOS, new ArbolUsuarios());
         }
-        return new ArbUsuarios();
+        return new ArbolUsuarios();
     }
 
-    private ArbCanciones cargarCanciones() {
+    private NodoCancion cargarCanciones() {
         File archivo = new File(ARCHIVO_CANCIONES);
         if (archivo.exists()) {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
                 System.out.println("Archivo de canciones encontrado. Deserializando...");
-                return (ArbCanciones) ois.readObject();
+                return (NodoCancion) ois.readObject();
             } catch (IOException | ClassNotFoundException e) {
                 System.err.println("Error al deserializar el archivo de canciones.");
                 e.printStackTrace();
             }
         } else {
             System.out.println("Archivo de canciones no encontrado. Creando archivo nuevo...");
-            crearArchivoVacio(ARCHIVO_CANCIONES, new ArbCanciones());
+            crearArchivoVacio(ARCHIVO_CANCIONES, new NodoCancion());
         }
-        return new ArbCanciones();
+        return new NodoCancion();
     }
 
-    private ListasPropias cargarListasPropias() {
+    private ListaPropia cargarListasPropias() {
         File archivo = new File(ARCHIVO_LISTAS_PROPIAS);
         if (archivo.exists()) {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
                 System.out.println("Archivo de listas propias encontrado. Deserializando...");
-                return (ListasPropias) ois.readObject();
+                return (ListaPropia) ois.readObject();
             } catch (IOException | ClassNotFoundException e) {
                 System.err.println("Error al deserializar el archivo de listas propias.");
                 e.printStackTrace();
             }
         } else {
             System.out.println("Archivo de listas propias no encontrado. Creando archivo nuevo...");
-            crearArchivoVacio(ARCHIVO_LISTAS_PROPIAS, new ListasPropias());
+            crearArchivoVacio(ARCHIVO_LISTAS_PROPIAS, new ListaPropia());
         }
-        return new ListasPropias();
+        return new ListaPropia();
     }
 
-    private ListasSeguidos cargarListasSeguidas() {
+    private ListaSeguidos cargarListasSeguidas() {
         File archivo = new File(ARCHIVO_LISTAS_SEGUIDAS);
         if (archivo.exists()) {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
                 System.out.println("Archivo de listas seguidas encontrado. Deserializando...");
-                return (ListasSeguidos) ois.readObject();
+                return (ListaSeguidos) ois.readObject();
             } catch (IOException | ClassNotFoundException e) {
                 System.err.println("Error al deserializar el archivo de listas seguidas.");
                 e.printStackTrace();
             }
         } else {
             System.out.println("Archivo de listas seguidas no encontrado. Creando archivo nuevo...");
-            crearArchivoVacio(ARCHIVO_LISTAS_SEGUIDAS, new ListasSeguidos());
+            crearArchivoVacio(ARCHIVO_LISTAS_SEGUIDAS, new ListaSeguidos());
         }
-        return new ListasSeguidos();
+        return new ListaSeguidos();
     }
 
-    private void guardarUsuarios(ArbUsuarios arbUsuarios) {
+    private void guardarUsuarios(ArbolUsuarios arbUsuarios) {
         crearArchivoVacio(ARCHIVO_USUARIOS, arbUsuarios);
     }
 
-    private void guardarCanciones(ArbCanciones arbCanciones) {
+    private void guardarCanciones(NodoCancion arbCanciones) {
         crearArchivoVacio(ARCHIVO_CANCIONES, arbCanciones);
     }
 
-    private void guardarListasPropias(ListasPropias listasPropias) {
+    private void guardarListasPropias(ListaPropia listasPropias) {
         crearArchivoVacio(ARCHIVO_LISTAS_PROPIAS, listasPropias);
     }
 
-    private void guardarListasSeguidas(ListasSeguidos listasSeguidos) {
+    private void guardarListasSeguidas(ListaSeguidos listasSeguidos) {
         crearArchivoVacio(ARCHIVO_LISTAS_SEGUIDAS, listasSeguidos);
     }
 
     // Método para crear un archivo vacío inicializando con el objeto indicado
+    //TODO ¿dejar el parametro object o reemplazarlo para mantener los parametros comunes de la catedra?
     private void crearArchivoVacio(String nombreArchivo, Object objetoInicial) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(nombreArchivo))) {
             oos.writeObject(objetoInicial);

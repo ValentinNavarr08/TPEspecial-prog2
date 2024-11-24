@@ -1,5 +1,23 @@
 //verificar donde crear las rutas de los archivos, en persistencia o en el main
 
+//TODO loguearUsuario(arbolUsuarios,arbolCanciones, listaAutores, scanner)
+
+//TODO nuevoUsuario(arbolUsuarios, scanner)
+//TODO verificarUsuario(String nombre) (Clase: ArbolUsuarios)
+
+//TODO agregarUsuario(String nombre, String password) (Clase: ArbolUsuarios)
+
+//TODO mostrarUsuariosRec() (Clase: ArbolUsuarios)
+
+//TODO verificarCancionEnPlaylist(String playlist, String cancion) (Clase: ArbolUsuarios)
+
+//TODO agregarCancionAPropias(String nombre, String playlist, String cancion, String autor) (Clase: ArbolUsuarios)
+
+//TODO verificarSeguidas(String nombre, String playlist) (Clase: ArbolUsuarios)
+
+//TODO mostrarListaPropias(String seguirNombre) (Clase: ArbolUsuarios)
+
+
 import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;
 public class Main {
@@ -23,8 +41,7 @@ public class Main {
             imprimirMenu1();
 
             opcion = obtenerEnteroValido(1, 4);
-            //TODO loguearUsuario(arbolUsuarios,arbolCanciones, listaAutores, scanner)
-            //TODO nuevoUsuario(arbolUsuarios, scanner)
+            
             switch (opcion) {
                 case 1: loguearUsuario(arbolUsuarios,arbolCanciones, listaAutores, scanner);break;
                 case 2: nuevoUsuario(arbolUsuarios, scanner);break;
@@ -77,7 +94,6 @@ public class Main {
         return texto;
     }    
 
-    //TODO verificarUsuario(nombre)
     private static void loguearUsuario(ArbolUsuarios arbolUsuarios, NodoCancion arbolCanciones, ListaAutores listaAutores) {
         String nombre = obtenerStringValido();
         String password = obtenerStringValido();
@@ -91,7 +107,6 @@ public class Main {
         }
     }
 
-    //TODO agregarUsuario(nombre, password)
     private static void nuevoUsuario (ArbolUsuarios arbolUsuarios) {
         String nombre = obtenerStringValido();
         String password = obtenerStringValido();
@@ -105,7 +120,6 @@ public class Main {
         }
     }
 
-    //TODO mostrarUsuariosRec();
     private static void verUsuariosExistentes(ArbolUsuarios arbolUsuarios) {
         arbolUsuarios.mostrarUsuariosRec();
     }
