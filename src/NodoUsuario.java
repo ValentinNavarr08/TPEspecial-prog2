@@ -10,6 +10,8 @@ public class NodoUsuario {
     public NodoUsuario(String nombre, String contrasena) {
         this.nombre = nombre;
         this.contrasena = contrasena;
+        this.izquierda = null;
+        this.derecha = null;
     }
 
     public NodoUsuario getIzquierda() {
@@ -29,11 +31,11 @@ public class NodoUsuario {
     }
 
     public ListaSeguidos getUsuariosSeguidos() {
-        return usuariosSeguidos;
+        return this.seguidos;
     }
 
-    public void setUsuariosSeguidos(ListaSeguidos usuariosSeguidos) {
-        this.usuariosSeguidos = usuariosSeguidos;
+    public void agregarUsuarioSeguido(NodoUsuario usuario) {
+        this.seguidos.agregarSeguidos(usuario);
     }
 
     public ListaPropia getPropias() {
@@ -59,6 +61,9 @@ public class NodoUsuario {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+    @Override
+    public String toString() {return this.nombre+" " +this.contrasena;}
 
     //TODO: crear nueva lista reproducciones,
     // agregar cancion por titulo a una lista de repro, agregar una cancion por autor (preguntar),

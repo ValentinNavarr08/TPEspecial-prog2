@@ -17,7 +17,9 @@
 
 //TODO mostrarListaPropias(String seguirNombre) (Clase: ArbolUsuarios)
 
+/*
 
+import java.nio.channels.AsynchronousServerSocketChannel;
 import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;
 public class Main {
@@ -130,7 +132,7 @@ public class Main {
         while (continuar) {
             imprimirMenu2();
 
-            int opcion = obtenerEnteroValido(1, 7)
+            int opcion = obtenerEnteroValido(1, 7);
 
             switch (opcion) {
                 case 1: datosCancion(arbolCanciones, scanner, listaAutores);
@@ -252,4 +254,4 @@ public class Main {
             System.out.println("este usuario no existe");
         }
     }
-}
+}*/
