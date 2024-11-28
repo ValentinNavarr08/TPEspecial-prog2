@@ -18,7 +18,7 @@ public class Persistencia {
     private ListaPropia listasPropias;
     private ListaSeguidos listasSeguidos;
 
-    public void cargarDatos() {
+    /*public void cargarDatos() {
         arbUsuarios = cargarUsuarios();
         arbCanciones = cargarCanciones();
         listasPropias = cargarListasPropias();
@@ -126,5 +126,5 @@ public class Persistencia {
             System.err.println("Error al crear el archivo: " + nombreArchivo);
             e.printStackTrace();
         }
-    }
+    }*/
 }

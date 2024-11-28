@@ -4,8 +4,12 @@ public class NodoCancion {
     private String Autor;
     private NodoCancion izquierda;
     private NodoCancion derecha;
-    private NodoCancion siguienteAutor;
+    private NodoCancion siguientexAutor;
 
+    public NodoCancion(String nombre, String autor) {
+        this.nombre = nombre;
+        Autor = autor;
+    }
 
     public String getNombre() {
         return nombre;
@@ -39,11 +43,11 @@ public class NodoCancion {
         this.derecha = derecha;
     }
 
-    public NodoCancion getSiguienteAutor() {
-        return siguienteAutor;
+    public NodoCancion getSiguientexAutor() {
+        return siguientexAutor;
     }
 
-    public void setSiguienteAutor(NodoCancion siguienteAutor) {
-        this.siguienteAutor = siguienteAutor;
+    public void setSiguientexAutor(NodoCancion siguienteAutor) {
+        this.siguientexAutor = siguienteAutor;
     }
 }

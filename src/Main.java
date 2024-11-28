@@ -5,9 +5,6 @@
 //TODO nuevoUsuario(arbolUsuarios, scanner)
 //TODO verificarUsuario(String nombre) (Clase: ArbolUsuarios)
 
-//TODO agregarUsuario(String nombre, String password) (Clase: ArbolUsuarios)
-
-//TODO mostrarUsuariosRec() (Clase: ArbolUsuarios)
 
 //TODO verificarCancionEnPlaylist(String playlist, String cancion) (Clase: ArbolUsuarios)
 
@@ -17,59 +14,95 @@
 
 //TODO mostrarListaPropias(String seguirNombre) (Clase: ArbolUsuarios)
 
-/*
+
 
 import java.nio.channels.AsynchronousServerSocketChannel;
 import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Main {
 
     private static int OPCION_MIN = 1;
     private static int OPCION_MAX = 4;
     private static Scanner scanner = new Scanner(System.in);
+    private static ArbolUsuarios arbolUsuarios;
+    private static ArbolCanciones arbolCanciones;
+    private static ListaAutores listaAutores;
 
     public static void main(String[] args) {
 
-        ArbolUsuarios arbolUsuarios = new ArbolUsuarios();
-        NodoCancion arbolCanciones = new NodoCancion();
-        ListaAutores listaAutores = new ListaAutores();
+         arbolUsuarios = new ArbolUsuarios();
+         arbolCanciones = new ArbolCanciones();
+         listaAutores = new ListaAutores();
 
-        Persistencia persistencia = new Persistencia();
-        persistencia.cargarDatos();
+//        Persistencia persistencia = new Persistencia();
+//        persistencia.cargarDatos();
 
-        int opcion = 1;
+        int opcion;
+        boolean seguir = true;
 
-        while (true) {
-            imprimirMenu1();
-
-            opcion = obtenerEnteroValido(1, 4);
+        while (seguir) {
+            opcion = obtenerEnteroValido(1, 4,1);
             
             switch (opcion) {
-                case 1: loguearUsuario(arbolUsuarios,arbolCanciones, listaAutores, scanner);break;
-                case 2: nuevoUsuario(arbolUsuarios, scanner);break;
-                case 3: verUsuariosExistentes(arbolUsuarios);break;
-                case 4: persistencia.guardarDatos();
+                case 1: loguearUsuario();break;
+                case 2: nuevoUsuario();break;
+                case 3: verUsuariosExistentes();break;
+                case 4: //persistencia.guardarDatos();
                     System.exit(0); break;
                 default: System.out.println("Algo Salió mal");break;
             }
-
+            if (comienzaNuevaInteraccion()){
+                seguir = true;
+            }
+            else seguir = false;
         }
+    }
+    public static boolean comienzaNuevaInteraccion(){
+        System.out.println("-------------------------------");
+        System.out.println("Desea acceder al Menu otra vez?");
+        return determinarBooleano();
+    }
+
+    public static boolean determinarBooleano() {
+        String ingresoTeclado = "";
+        while (!(ingresoTeclado.equals("SI") || ingresoTeclado.equals("NO"))) {
+            // si está dentro de las opciones
+            try {
+                System.out.println("Recorda que en esta opcion solo podes poner SI o NO ");
+                ingresoTeclado = scanner.next();
+                System.out.println();
+            } catch (Exception e) {
+                System.out.println("Opción inválida, intente de nuevo: ");
+                scanner.next();
+            }
+        }
+        return ingresoTeclado.equals("SI");
     }
 
     private static void imprimirMenu1() {
-        System.out.println("\n--- Menú Principal ---");
+        System.out.println("\n--- Menu Principal ---");
         System.out.println("1. Login");
         System.out.println("2. Nuevo Usuario");
         System.out.println("3. Ver Usuarios existentes");
         System.out.println("4. Salir");
-        System.out.print("Elige una opción: ");
+        System.out.print("Elige una opcion: ");
     }
 
-    public static int obtenerEnteroValido(int opcionMin, int opcionMax) {
-        int numero = 1;
-        while (!(numero >= opcionMin && numero <= opcionMax)) {
+    public static int obtenerEnteroValido(int opcionMin, int opcionMax, int menu) {
+        int numero = -100000;
+        while (!(numero >= OPCION_MIN && numero <= OPCION_MAX)) {
             // si está dentro del rango
+
             try {
+                if(menu == 1){
+                    imprimirMenu1();
+                }
+                if(menu == 2){
+                    imprimirMenu2();
+                }
                 numero = scanner.nextInt();
                 System.out.println();
             } catch (Exception e) {
@@ -81,13 +114,18 @@ public class Main {
     }
 
     public static String obtenerStringValido() {
-        String texto = "";
-        while (texto.isEmpty()) {
+
+        String condicion = "\\w{1,20}";
+
+        String texto = scanner.nextLine();
+        //compruebo condocion de contraseña
+        Pattern pattern = Pattern.compile(condicion);
+        Matcher matcher = pattern.matcher(texto);
+
+        while (!matcher.matches()) {
             try {
-                texto = scanner.nextLine().trim();
-                if (texto.isEmpty()) {
-                    System.out.println("Entrada vacía, intente de nuevo: ");
-                }
+                texto = scanner.nextLine();
+                matcher = pattern.matcher(texto);
             } catch (Exception e) {
                 System.out.println("Entrada inválida, intente de nuevo: ");
                 scanner.next();
@@ -96,51 +134,85 @@ public class Main {
         return texto;
     }    
 
-    private static void loguearUsuario(ArbolUsuarios arbolUsuarios, NodoCancion arbolCanciones, ListaAutores listaAutores) {
+    private static void loguearUsuario() {
+        System.out.println("Ingrese el nombre del Usuario");
         String nombre = obtenerStringValido();
+        System.out.println("Ingrese la contraseña del Usuario");
         String password = obtenerStringValido();
 
-        boolean existe = arbolUsuarios.verificarUsuario(nombre);
+        NodoUsuario usuario = arbolUsuarios.buscarUsuario(nombre);
+        System.out.println("aaaa");
+        System.out.println(usuario);
 
-        if (existe) {
-            segundoMenu(arbolUsuarios, arbolCanciones, listaAutores, scanner, nombre); //verificar que necesito
+        if (usuario != null && usuario.getContrasena() == password) {
+            segundoMenu(nombre);
+            System.out.println("Usted se ha logeado correctamente como:"+nombre);
+
         } else {
             System.out.println("Usuario inexistente");
         }
+
     }
 
-    private static void nuevoUsuario (ArbolUsuarios arbolUsuarios) {
+
+    private static void nuevoUsuario () {
+        System.out.println("Usted selecciono la opcion Logearse como un nuevo usuario");
+        System.out.println("Ingrese el nombre del Usuario");
         String nombre = obtenerStringValido();
-        String password = obtenerStringValido();
+        System.out.println("Ingrese la contrseña del Usuario");
+        System.out.println("Recuerde que la contrseña debe contener al menos 3 letras");
+        String password = obtenercontraValida();
 
-        boolean existe = arbolUsuarios.verificarUsuario(nombre, password);
+        NodoUsuario nombreIngresado = arbolUsuarios.buscarUsuario(nombre);
 
-        if (!existe) {
-            arbolUsuarios.agregarUsuario(nombre, password);
+        //si no hay un usuario con ese nombre, y la contra coicide, lo agrega
+        if (nombreIngresado == null) {
+            arbolUsuarios.insertarUsuario(nombre, password);
+            System.out.println("El Usuario "+nombre +", se ha creado satisfactoriamente");
+            segundoMenu(nombre);
         } else {
             System.out.println("Usuario ya existente");
         }
     }
+    public static String obtenercontraValida() {
 
-    private static void verUsuariosExistentes(ArbolUsuarios arbolUsuarios) {
-        arbolUsuarios.mostrarUsuariosRec();
+        String condicion = "\\S{3,}";
+
+        String texto = scanner.nextLine();
+        //compruebo condocion de contraseña
+        Pattern pattern = Pattern.compile(condicion);
+        Matcher matcher = pattern.matcher(texto);
+
+        while (!matcher.matches()) {
+            try {
+                texto = scanner.nextLine();
+                matcher = pattern.matcher(texto);
+            } catch (Exception e) {
+                System.out.println("Entrada inválida, intente de nuevo: ");
+                System.out.println("Recuerde que la contrseña debe contener al menos 3 letras");
+                scanner.next();
+            }
+        }
+        return texto;
     }
 
-    private static void segundoMenu (ArbolUsuarios arbolUsuarios, NodoCancion arbolCanciones, ListaAutores listaAutores, Scanner scanner, String nombre) {
+    private static void verUsuariosExistentes() {
+        arbolUsuarios.imprimirOrdenado();
+    }
+
+    private static void segundoMenu(String nombre) {
         boolean continuar = true;
 
         while (continuar) {
-            imprimirMenu2();
-
-            int opcion = obtenerEnteroValido(1, 7);
+            int opcion = obtenerEnteroValido(1, 7,2);
 
             switch (opcion) {
-                case 1: datosCancion(arbolCanciones, scanner, listaAutores);
-                case 2: crearPlaylistPropia(nombre, arbolCanciones, scanner, arbolUsuarios);
-                case 3: agregarCancionAPlaylist(arbolUsuarios, arbolCanciones, nombre, scanner);
-                case 4: agregarCancionPorAutor(arbolUsuarios, arbolCanciones, nombre, scanner, listaAutores);
+                case 1: agregarCancion();
+                case 2: crearPlaylistPropia(nombre);
+                case 3: agregarCancionAPlaylist(nombre);
+                /*case 4: agregarCancionPorAutor(arbolUsuarios, arbolCanciones, nombre, scanner, listaAutores);
                 case 5: eliminarPlaylistPropia(nombre, scanner, arbolUsuarios);
-                case 6: seguirUsuario(arbolUsuarios, nombre, scanner);
+                case 6: seguirUsuario(arbolUsuarios, nombre, scanner);*/
                 case 7: continuar = false;
             }
         }
@@ -158,53 +230,76 @@ public class Main {
         System.out.print("Elige una opción: ");
     }
 
-    private static void datosCancion(NodoCancion arbolCanciones, Scanner scanner, ListaAutores listaAutores) {
-        String titulo = obtenerStringValido();
-        String autor = obtenerStringValido();
+    private static void agregarCancion() {
+        System.out.println("Usted ha seleccionado la opcion de agregar una cancion");
+        System.out.println("Ingrese el nombre de la nueva cancion");
+        String Ntitulo = obtenerStringValido();
+        System.out.println("Ingrese el nombre del Autor de la cancion");
+        String Nautor = obtenerStringValido();
 
-        boolean existeCancion = arbolCanciones.verificarCancion(titulo, autor);
-        boolean existePorAutor = listaAutores.verificarCancionEnAutor(titulo, autor);
-        
-        if (!existeCancion && !existePorAutor) {
-            listaAutores.agregarCancion(titulo, autor);
+        NodoCancion cancion = arbolCanciones.buscarCancion(Ntitulo);
+        boolean existeAutor = listaAutores.verificarAutor(Nautor);
+
+        //si no existe la creo
+        if (cancion == null) {
+            NodoCancion insertar = new NodoCancion(Ntitulo,Nautor);
+            arbolCanciones.insertarCancion(insertar);
+            //si no existe tampoco el autor
+            if(!existeAutor){
+                listaAutores.insertar(Nautor);
+            }
+            Autor autor = listaAutores.obtenerAutor(Nautor);
+            NodoCancion cancionyaexistente = arbolCanciones.buscarCancion(Ntitulo);
+            autor.agregarCancion(cancionyaexistente);
+            System.out.println("La cancion se ha creado con exito!");
         }
+        else{
+            System.out.println("Esta cancion ya forma parte de nuestra biblioteca de canciones");
+        }
+
     }
 
-    private static void crearPlaylistPropia(String nombre, NodoCancion arbolCanciones, Scanner scanner, ArbolUsuarios arbolUsuarios) {
+    private static void crearPlaylistPropia(String nombre) {
         String playlist = obtenerStringValido();
-        boolean playlistExiste = arbolUsuarios.verificarPlaylist(nombre, playlist);
+        NodoUsuario usuario = arbolUsuarios.buscarUsuario(nombre);
 
-        if  (!playlistExiste) {
-            arbolUsuarios.crearPlaylist(nombre, playlist);
+
+        if  (!usuario.tienePLPropia(playlist)) {
+            usuario.agegarPLPropia(playlist);
+            System.out.println("Se ha agregado la playlist: "+playlist+", vacia");
         } else {
-            System.out.println("la playlist no existe");
+            System.out.println("Este usuario ya tiene una playlist con ese nombre");
         }
     }
 
-    private static void agregarCancionAPlaylist(ArbolUsuarios arbolUsuarios, NodoCancion arbolCanciones,String nombre, Scanner scanner) {
+    private static void agregarCancionAPlaylist(String nombre) {
         String playlist = obtenerStringValido();
         String tituloCancion = obtenerStringValido();
 
-        boolean playlistExiste = arbolUsuarios.verificarPlaylist(nombre, playlist);
-        boolean cancionExiste = arbolUsuarios.verificarCancion(tituloCancion);
-        if(!cancionExiste) {
-            
-            String autor = obtenerStringValido();
-            arbolUsuarios.agregarCancion(tituloCancion, autor);
-        }
+        NodoUsuario usuario = arbolUsuarios.buscarUsuario(nombre);
+        Playlist playlistPropia = usuario.obtenerPropia(playlist);
+        NodoCancion cancion = arbolCanciones.buscarCancion(tituloCancion);
 
-        if (!playlistExiste) {
-            arbolUsuarios.crearPlaylist(nombre, playlist);
-            arbolUsuarios.agregarCancionAPropias(playlist, tituloCancion);
-        } else {
-            boolean cancionExisteEnPlaylist = arbolUsuarios.verificarCancionEnPlaylist(nombre, playlist, tituloCancion);
-            if (!cancionExisteEnPlaylist) {
-                arbolUsuarios.agregarCancionAPropias(playlist, tituloCancion);
+        //si existe la playlist
+        if(playlistPropia != null){
+            //y la cancion en el arbol
+            if(cancion != null){
+                //y no tiene la cancion en la playlist
+                if(!playlistPropia.tieneCancion(cancion)){
+                    playlistPropia.agregarCancion(cancion);
+                    System.out.println("La cancion "+tituloCancion+" ha sido agregada a la lista: "+playlist);
+                }
+                else{
+                    System.out.println("La cancion "+tituloCancion+" ya está en la lista: "+playlist);
+                }
             }
+            else System.out.println("La cancion "+tituloCancion+"no existe en la base de Datos, agregue la cancion antes de insertarla en la Playlist");
         }
+        else System.out.println("La lista: "+playlist+", no existe para el usuario: "+usuario.getNombre());
+
     }
     //este metodo se encarga de elegir una cancion de un autor y agregarla a una playlist propia
-    private static void agregarCancionPorAutor(ArbolUsuarios arbolUsuarios,NodoCancion arbolCanciones,String nombre,Scanner scanner, ListaAutores listaAutores) {
+    /*private static void agregarCancionPorAutor(ArbolUsuarios arbolUsuarios,NodoCancion arbolCanciones,String nombre,Scanner scanner, ListaAutores listaAutores) {
         String playlist = obtenerStringValido();
         String autor = obtenerStringValido();
 
@@ -253,5 +348,5 @@ public class Main {
         } else {
             System.out.println("este usuario no existe");
         }
-    }
-}*/
+    }*/
+}

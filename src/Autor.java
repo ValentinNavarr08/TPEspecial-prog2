@@ -4,6 +4,10 @@ public class Autor {
     private Autor siguienteAutor;
     private NodoCancion primera;
 
+    public Autor(String nautor) {
+        this.nombre = nautor;
+    }
+
     public String getNombre() {
         return nombre;
     }
@@ -12,11 +16,11 @@ public class Autor {
         this.nombre = nombre;
     }
 
-    public Autor getSiguienteAutor() {
+    public Autor getSiguiente() {
         return siguienteAutor;
     }
 
-    public void setSiguienteAutor(Autor siguienteAutor) {
+    public void setSiguiente(Autor siguienteAutor) {
         this.siguienteAutor = siguienteAutor;
     }
 
@@ -25,10 +29,17 @@ public class Autor {
     }
 
     public void agregarCancion(NodoCancion nueva) {
-        NodoCancion aux =  this.primera;
-        while(aux != null && aux.getSiguienteAutor() != null) {
-            aux = aux.getSiguienteAutor();
+        if(primera != null){
+            NodoCancion aux =  this.primera;
+            while(aux != null && aux.getSiguientexAutor() != null) {
+                aux = aux.getSiguientexAutor();
+            }
+            aux.setSiguientexAutor(nueva);
         }
-        aux.setSiguienteAutor(nueva);
+        else{
+            primera = nueva;
+        }
+
+
     }
 }
