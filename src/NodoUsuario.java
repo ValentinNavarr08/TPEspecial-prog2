@@ -36,16 +36,8 @@ public class NodoUsuario {
         return this.seguidos;
     }
 
-    public void agregarUsuarioSeguido(NodoUsuario usuario) {
-        this.seguidos.agregarSeguidos(usuario);
-    }
-
     public ListaPropia getPropias() {
         return propias;
-    }
-
-    public void setPropias(ListaPropia propias) {
-        this.propias = propias;
     }
 
     public String getContrasena() {

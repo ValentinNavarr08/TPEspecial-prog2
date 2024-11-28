@@ -30,12 +30,14 @@ public class Main {
     private static ArbolUsuarios arbolUsuarios;
     private static ArbolCanciones arbolCanciones;
     private static ListaAutores listaAutores;
+    private static NodoUsuario usuarioLogeado;
 
     public static void main(String[] args) {
 
          arbolUsuarios = new ArbolUsuarios();
          arbolCanciones = new ArbolCanciones();
          listaAutores = new ListaAutores();
+         usuarioLogeado = null;
 
 //        Persistencia persistencia = new Persistencia();
 //        persistencia.cargarDatos();
@@ -141,11 +143,10 @@ public class Main {
         String password = obtenerStringValido();
 
         NodoUsuario usuario = arbolUsuarios.buscarUsuario(nombre);
-        System.out.println("aaaa");
-        System.out.println(usuario);
 
         if (usuario != null && usuario.getContrasena() == password) {
             segundoMenu(nombre);
+            usuarioLogeado = usuario;
             System.out.println("Usted se ha logeado correctamente como:"+nombre);
 
         } else {
@@ -169,7 +170,8 @@ public class Main {
         if (nombreIngresado == null) {
             arbolUsuarios.insertarUsuario(nombre, password);
             System.out.println("El Usuario "+nombre +", se ha creado satisfactoriamente");
-            segundoMenu(nombre);
+            usuarioLogeado = arbolUsuarios.buscarUsuario(nombre);
+            segundoMenu();
         } else {
             System.out.println("Usuario ya existente");
         }
@@ -200,7 +202,7 @@ public class Main {
         arbolUsuarios.imprimirOrdenado();
     }
 
-    private static void segundoMenu(String nombre) {
+    private static void segundoMenu() {
         boolean continuar = true;
 
         while (continuar) {
@@ -208,8 +210,8 @@ public class Main {
 
             switch (opcion) {
                 case 1: agregarCancion();
-                case 2: crearPlaylistPropia(nombre);
-                case 3: agregarCancionAPlaylist(nombre);
+                case 2: crearPlaylistPropia();
+                case 3: agregarCancionAPlaylist();
                 /*case 4: agregarCancionPorAutor(arbolUsuarios, arbolCanciones, nombre, scanner, listaAutores);
                 case 5: eliminarPlaylistPropia(nombre, scanner, arbolUsuarios);
                 case 6: seguirUsuario(arbolUsuarios, nombre, scanner);*/
@@ -256,28 +258,28 @@ public class Main {
         else{
             System.out.println("Esta cancion ya forma parte de nuestra biblioteca de canciones");
         }
+        segundoMenu();
 
     }
 
-    private static void crearPlaylistPropia(String nombre) {
+    private static void crearPlaylistPropia() {
         String playlist = obtenerStringValido();
-        NodoUsuario usuario = arbolUsuarios.buscarUsuario(nombre);
 
 
-        if  (!usuario.tienePLPropia(playlist)) {
-            usuario.agegarPLPropia(playlist);
+        if  (!usuarioLogeado.tienePLPropia(playlist)) {
+            usuarioLogeado.agegarPLPropia(playlist);
             System.out.println("Se ha agregado la playlist: "+playlist+", vacia");
         } else {
-            System.out.println("Este usuario ya tiene una playlist con ese nombre");
+            System.out.println("Usted ya tiene una playlist con ese nombre");
         }
     }
 
-    private static void agregarCancionAPlaylist(String nombre) {
+    private static void agregarCancionAPlaylist() {
         String playlist = obtenerStringValido();
         String tituloCancion = obtenerStringValido();
 
-        NodoUsuario usuario = arbolUsuarios.buscarUsuario(nombre);
-        Playlist playlistPropia = usuario.obtenerPropia(playlist);
+
+        Playlist playlistPropia = usuarioLogeado.obtenerPropia(playlist);
         NodoCancion cancion = arbolCanciones.buscarCancion(tituloCancion);
 
         //si existe la playlist
