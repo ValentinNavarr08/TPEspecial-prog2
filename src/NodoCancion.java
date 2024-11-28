@@ -50,4 +50,7 @@ public class NodoCancion {
     public void setSiguientexAutor(NodoCancion siguienteAutor) {
         this.siguientexAutor = siguienteAutor;
     }
+
+    @Override
+    public String toString() {return this.nombre+" por: "+this.getAutor().toString();}
 }

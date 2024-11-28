@@ -77,6 +77,14 @@ public class NodoUsuario {
         return this.propias.obtenerPlaylist(playlist);
     }
 
+    public void imprimirPLPropias() {
+        propias.imprimirTodas();
+    }
+
+    public void eliminarPropia(Playlist eliminar) {
+        this.propias.eliminar(eliminar);
+    }
+
     //TODO: crear nueva lista reproducciones,
     // agregar cancion por titulo a una lista de repro, agregar una cancion por autor (preguntar),
     // eliminar una lista de reprod propia,

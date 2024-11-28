@@ -21,8 +21,7 @@ public class ListaAutores {
         Autor aux = null;
         if (primero != null) {
             aux = primero;
-
-            while (aux != null && aux.getNombre() != autor) {
+            while (aux.getSiguiente() != null && !aux.getNombre().equalsIgnoreCase(autor)) {
                 aux = aux.getSiguiente();
             }
         }
@@ -30,24 +29,21 @@ public class ListaAutores {
             return false;
         }
 
-        return aux.getNombre() != autor;
+        return aux.getNombre().equalsIgnoreCase(autor);
     }
 
     public Autor obtenerAutor(String nombre){
         Autor a = null;
         if(primero != null){
             a = primero;
-        }
-        while(a !=null && a.getNombre() != nombre){
-            a = a.getSiguiente();
+            while(a != null && !a.getNombre().equalsIgnoreCase(nombre)){
+                a = a.getSiguiente();
+            }
+            if(a.getNombre().equalsIgnoreCase(nombre)){
+                return a;
+            }
         }
 
-        if(a.getNombre() == nombre){
-            return a;
-        }
-        else {
-            a = null;
-        }
         return a;
     }
 

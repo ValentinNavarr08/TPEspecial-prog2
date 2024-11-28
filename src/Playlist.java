@@ -39,7 +39,7 @@ public class Playlist {
         boolean contiene = false;
         NodoPlaylist aux = primero;
         for (int i=0; i<cantCanciones; i++){
-            if(aux.getCancion() == cancion){
+            if(aux.getCancion().equals(cancion)){
                 contiene = true;
             }
             aux.getSiguiente();
@@ -48,13 +48,18 @@ public class Playlist {
     }
 
     public void agregarCancion(NodoCancion cancion) {
-        NodoPlaylist aux = primero;
-        for (int i=0; i<cantCanciones; i++){
-            aux.getSiguiente();
+        if(primero != null){
+            NodoPlaylist aux = primero;
+            for (int i=0; i<cantCanciones; i++){
+                aux.getSiguiente();
+            }
+            NodoPlaylist nPL = new NodoPlaylist(cancion);
+            nPL.setSiguiente(primero);
+            aux.setSiguiente(nPL);
         }
-        NodoPlaylist nPL = new NodoPlaylist(cancion);
-        nPL.setSiguiente(primero);
-        aux.setSiguiente(nPL);
+        else primero = new NodoPlaylist(cancion);
         cantCanciones++;
     }
+
+    public String toString() {return this.nombre;}
 }

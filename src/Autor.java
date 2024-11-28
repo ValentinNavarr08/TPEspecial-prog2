@@ -42,4 +42,17 @@ public class Autor {
 
 
     }
+
+    public void imprimirCanciones() {
+        if(primera != null){
+            NodoCancion aux =  this.primera;
+            while(aux != null) {
+                System.out.println(aux);
+                aux = aux.getSiguientexAutor();
+            }
+        }
+    }
+
+    @Override
+    public String toString() {return this.nombre;}
 }
