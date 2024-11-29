@@ -1,32 +1,26 @@
-//TODO: falta adaptarla al programa
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.IOException;
+import java.lang.ClassNotFoundException;
 
-import java.io.*;
+public class Archivos {
 
-public class Persistencia {
-
-    private static final String ARCHIVO_USUARIOS = "ArchUsuarios.ser";
-    private static final String ARCHIVO_CANCIONES = "ArchCanciones.ser";
-    private static final String ARCHIVO_LISTAS_PROPIAS = "ArchListasPropias.ser";
-    private static final String ARCHIVO_LISTAS_SEGUIDAS = "ArchListasSeguidas.ser";
-
-    //private ArbCanciones arbCanciones;
-    //private ListasPropias listasPropias;
-    //private ListasSeguidos listasSeguidos;
+    private static final String ARCHIVO_USUARIOS = "/work/archivoUsuarios.serLNS";                               //"ArchUsuarios.ser";
+    private static final String ARCHIVO_CANCIONES = "/work/archivoCanciones.serLNS";                              //ArchCanciones.ser";
+    private static final String ARCHIVO_LISTAS_PROPIAS = "/work/archivoListasPropias.serLNS";                         //"ArchListasPropias.ser";
+    private static final String ARCHIVO_LISTAS_SEGUIDAS = "/work/archivoLsitasSeguidas.serLNS";                        //"ArchListasSeguidas.ser";;
 
     private ArbolUsuarios arbUsuarios;
     private NodoCancion arbCanciones;
     private ListaPropia listasPropias;
     private ListaSeguidos listasSeguidos;
 
-    /*public void cargarDatos() {
-        arbUsuarios = cargarUsuarios();
-        arbCanciones = cargarCanciones();
-        listasPropias = cargarListasPropias();
-        listasSeguidos = cargarListasSeguidas();
-    }
 
-    public void guardarDatos() {
-        guardarUsuarios(arbUsuarios);
+
+    public void guardarDatos(NodoUsuario n) {
         guardarCanciones(arbCanciones);
         guardarListasPropias(listasPropias);
         guardarListasSeguidas(listasSeguidos);
@@ -37,7 +31,9 @@ public class Persistencia {
         if (archivo.exists()) {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
                 System.out.println("Archivo de usuarios encontrado. Deserializando...");
+
                 return (ArbolUsuarios) ois.readObject();
+
             } catch (IOException | ClassNotFoundException e) {
                 System.err.println("Error al deserializar el archivo de usuarios.");
                 e.printStackTrace();
@@ -47,23 +43,6 @@ public class Persistencia {
             crearArchivoVacio(ARCHIVO_USUARIOS, new ArbolUsuarios());
         }
         return new ArbolUsuarios();
-    }
-
-    private NodoCancion cargarCanciones() {
-        File archivo = new File(ARCHIVO_CANCIONES);
-        if (archivo.exists()) {
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
-                System.out.println("Archivo de canciones encontrado. Deserializando...");
-                return (NodoCancion) ois.readObject();
-            } catch (IOException | ClassNotFoundException e) {
-                System.err.println("Error al deserializar el archivo de canciones.");
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("Archivo de canciones no encontrado. Creando archivo nuevo...");
-            crearArchivoVacio(ARCHIVO_CANCIONES, new NodoCancion());
-        }
-        return new NodoCancion();
     }
 
     private ListaPropia cargarListasPropias() {
@@ -100,8 +79,15 @@ public class Persistencia {
         return new ListaSeguidos();
     }
 
-    private void guardarUsuarios(ArbolUsuarios arbUsuarios) {
-        crearArchivoVacio(ARCHIVO_USUARIOS, arbUsuarios);
+    public void guardarUsuario(NodoUsuario usuario) {
+        File archivo = new File(ARCHIVO_USUARIOS);
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(archivo))) {
+            oos.writeObject(usuario);
+            System.out.println("Usuario"+ usuario.getNombre() + " guardado.");
+        } catch (IOException e) {
+            System.err.println("Error al guardar el archivo de usuario"+ usuario.getNombre() );
+            e.printStackTrace();
+        }
     }
 
     private void guardarCanciones(NodoCancion arbCanciones) {
@@ -121,10 +107,10 @@ public class Persistencia {
     private void crearArchivoVacio(String nombreArchivo, Object objetoInicial) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(nombreArchivo))) {
             oos.writeObject(objetoInicial);
-            System.out.println("Archivo " + nombreArchivo + " guardado exitosamente.");
+            System.out.println("Archivo guardado exitosamente.");
         } catch (IOException e) {
             System.err.println("Error al crear el archivo: " + nombreArchivo);
             e.printStackTrace();
         }
-    }*/
+    }
 }

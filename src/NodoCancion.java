@@ -1,14 +1,12 @@
 public class NodoCancion {
 
     private String nombre;
-    private String Autor;
     private NodoCancion izquierda;
     private NodoCancion derecha;
     private NodoCancion siguientexAutor;
 
-    public NodoCancion(String nombre, String autor) {
+    public NodoCancion(String nombre) {
         this.nombre = nombre;
-        Autor = autor;
     }
 
     public String getNombre() {
@@ -17,14 +15,6 @@ public class NodoCancion {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public String getAutor() {
-        return Autor;
-    }
-
-    public void setAutor(String autor) {
-        Autor = autor;
     }
 
     public NodoCancion getIzquierda() {
@@ -52,5 +42,5 @@ public class NodoCancion {
     }
 
     @Override
-    public String toString() {return this.nombre+" por: "+this.getAutor().toString();}
+    public String toString() {return this.nombre;}
 }

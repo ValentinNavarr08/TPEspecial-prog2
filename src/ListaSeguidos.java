@@ -2,10 +2,14 @@ public class ListaSeguidos {
 
     private NodoSeguido primero;
 
-    public ListaSeguidos() {}
 
-    public void agregarSeguidos(NodoUsuario nuevo) {
-        NodoSeguido insertar = new NodoSeguido(nuevo);
+
+    public ListaSeguidos(){
+        this.primero = null;
+    }
+
+    public void agregarSeguidas(NodoUsuario nuevo, Playlist playlist) {
+        NodoSeguido insertar = new NodoSeguido(nuevo, playlist);
 
         if(primero == null) {
             primero = insertar;
@@ -17,5 +21,21 @@ public class ListaSeguidos {
             }
             aux.setSiguiente(insertar);
         }
+
     }
+
+    /*public boolean tiene(Playlist plaSeguir) {
+        boolean tiene = false;
+        NodoSeguido aux = null;
+        if(primero != null) {
+            aux = primero;
+            while (aux != null && aux.getSiguiente() != null) {
+                if(aux.getPlSeguida().getNombre().equals(plaSeguir.getNombre())) {
+                    tiene = true;
+                }
+                aux = aux.getSiguiente();
+            }
+        }
+        return tiene;
+    }*/
 }

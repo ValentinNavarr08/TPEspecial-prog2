@@ -147,5 +147,22 @@ public class ArbolUsuarios {
 
     }
 
+    public void serializarArbol(Archivos persistencia) {
+        this.serializarRec(this.raiz, persistencia);
+    }
+
+    private void serializarRec(NodoUsuario n, Archivos persistencia) {
+        if(n != null) {
+            if(n.getIzquierda() != null) {
+                this.serializarRec(n.getIzquierda(), persistencia);
+            }
+            persistencia.guardarUsuario(n);
+            if(n.getDerecha() != null) {
+                this.serializarRec(n.getDerecha(), persistencia);
+            }
+        }
+
+    }
+
 }
 

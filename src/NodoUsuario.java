@@ -1,18 +1,20 @@
-public class NodoUsuario {
+import java.io.Serializable;
+
+public class NodoUsuario  implements Serializable {
 
     private String nombre;
     private String contrasena;
-    private NodoUsuario izquierda;
-    private NodoUsuario derecha;
-    private ListaSeguidos seguidos;
-    private ListaPropia propias;
+    private transient NodoUsuario izquierda;
+    private transient NodoUsuario derecha;
+    private transient ListaSeguidos seguidas;
+    private transient ListaPropia propias;
 
     public NodoUsuario(String nombre, String contrasena) {
         this.nombre = nombre;
         this.contrasena = contrasena;
         this.izquierda = null;
         this.derecha = null;
-        this.seguidos = new ListaSeguidos();
+        this.seguidas = new ListaSeguidos();
         this.propias = new ListaPropia();
     }
 
@@ -32,8 +34,8 @@ public class NodoUsuario {
         this.derecha = derecha;
     }
 
-    public ListaSeguidos getUsuariosSeguidos() {
-        return this.seguidos;
+    public ListaSeguidos getSeguidas() {
+        return this.seguidas;
     }
 
     public ListaPropia getPropias() {
@@ -85,8 +87,7 @@ public class NodoUsuario {
         this.propias.eliminar(eliminar);
     }
 
-    //TODO: crear nueva lista reproducciones,
-    // agregar cancion por titulo a una lista de repro, agregar una cancion por autor (preguntar),
-    // eliminar una lista de reprod propia,
-    // incluir la lista de otro usuario (seguirlo)
+    public void agregarSeguida(NodoUsuario aseguir, Playlist playlist) {
+        this.seguidas.agregarSeguidas(aseguir, playlist);
+    }
 }

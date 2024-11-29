@@ -36,7 +36,7 @@ public class Main {
          listaAutores = new ListaAutores();
          usuarioLogeado = null;
 
-//        Persistencia persistencia = new Persistencia();
+         Archivos persistencia = new Archivos();
 //        persistencia.cargarDatos();
 
         int opcion;
@@ -54,6 +54,7 @@ public class Main {
                 case 2: nuevoUsuario();break;
                 case 3: verUsuariosExistentes();break;
                 case 4: //persistencia.guardarDatos();
+                    arbolUsuarios.serializarArbol(persistencia);
                     System.exit(0); break;
                 default: System.out.println("Algo salió mal");break;
             }
@@ -144,10 +145,10 @@ public class Main {
 
         NodoUsuario usuario = arbolUsuarios.buscarUsuario(nombre);
 
-        if (usuario != null && usuario.getContrasena() == password) {
-            segundoMenu();
+        if (usuario != null && usuario.getContrasena().equals(password)) {
             usuarioLogeado = usuario;
             System.out.println("Usted se ha logueado correctamente como:"+nombre);
+            segundoMenu();
 
         } else {
             System.out.println("Usuario inexistente");
@@ -171,7 +172,6 @@ public class Main {
             arbolUsuarios.insertarUsuario(nombre, password);
             System.out.println("El Usuario "+nombre +", se ha creado satisfactoriamente");
             usuarioLogeado = arbolUsuarios.buscarUsuario(nombre);
-            segundoMenu();
         } else {
             System.out.println("Usuario ya existente");
         }
@@ -244,7 +244,7 @@ public class Main {
 
         //si no existe la creo
         if (cancion == null) {
-            NodoCancion insertar = new NodoCancion(Ntitulo,Nautor);
+            NodoCancion insertar = new NodoCancion(Ntitulo);
             arbolCanciones.insertarCancion(insertar);
             //si no existe tampoco el autor
             if(!existeAutor){
@@ -258,7 +258,6 @@ public class Main {
         else{
             System.out.println("Esta canción ya forma parte de nuestra biblioteca de canciones");
         }
-        segundoMenu();
 
     }
 
@@ -274,7 +273,6 @@ public class Main {
         } else {
             System.out.println("Usted ya tiene una playlist con ese nombre");
         }
-        segundoMenu();
     }
 
     private static void agregarCancionAPlaylist() {
@@ -307,7 +305,7 @@ public class Main {
             else System.out.println("La canción "+tituloCancion+"no existe en la base de Datos, agregue la canción antes de insertarla en la Playlist");
         }
         else System.out.println("La lista: "+playlist+", no existe para el usuario: "+usuarioLogeado.getNombre());
-        segundoMenu();
+
     }
 
 
@@ -349,7 +347,7 @@ public class Main {
             else System.out.println("La canción "+tituloCancion+"no existe en la base de Datos, agregue la canción antes de insertarla en la Playlist");
         }
         else System.out.println("La lista: "+playlist+", no existe para el usuario: "+usuarioLogeado.getNombre());
-        segundoMenu();
+
 
     }
 
@@ -369,25 +367,29 @@ public class Main {
         } else {
             System.out.println("esta playlist no existe");
         }
-        segundoMenu();
+
     }
 
     private static void seguirUsuario() {
-        
-       /* String seguirNombre = obtenerStringValido();
-        boolean existe = arbolUsuarios.verificarUsuario(nombre);
+        System.out.println("Usted ha seleccionado la opcion de seguir un usuario");
+        System.out.println("Ingrese el nombre del usuario a Seguir");
+        String seguirNombre = obtenerStringValido();
+        NodoUsuario aseguir = arbolUsuarios.buscarUsuario(seguirNombre);
 
-        if(existe) {
-            arbolUsuarios.mostrarListaPropias(seguirNombre);
-            
+        if(aseguir != null) {
+            System.out.println("Estas son todas las listas del usuario:" + aseguir.getNombre());
+            aseguir.imprimirPLPropias();
+            System.out.println("Ingrese el nombre de la Playlist:");
             String playlist = obtenerStringValido();
-            boolean playlistEnSeguidas = arbolUsuarios.verificarSeguidas(nombre, playlist);
 
-            if(!playlistEnSeguidas) {
-                arbolUsuarios.agregarASeguidas(nombre, playlist);
+            Playlist PlaSeguir = aseguir.getPropias().obtenerPlaylist(playlist);
+
+            if(PlaSeguir != null /*&& !usuarioLogeado.getSeguidas().tiene(PlaSeguir)*/) {
+                usuarioLogeado.agregarSeguida(aseguir, PlaSeguir);
+                System.out.println("se ha seguido la playlist:"+ PlaSeguir.getNombre());
             }
         } else {
-            System.out.println("este usuario no existe");
-        }*/
+            System.out.println("esta Playlist no existe en la lista de:" + aseguir.getNombre());
+        }
     }
 }
