@@ -14,7 +14,7 @@ public class ListaPropia {
         Playlist pl = null;
         if(primera != null){
             pl = primera;
-
+            
             while(pl.getSiguiente() != null){
                 pl.getSiguiente();
             }
@@ -29,7 +29,7 @@ public class ListaPropia {
         Playlist pl = null;
         if(primera != null){
             pl = primera;
-
+            
             while(pl.getSiguiente() != null && pl.getSiguiente() != borrar){
                 pl.getSiguiente();
             }
@@ -49,7 +49,6 @@ public class ListaPropia {
                 pl = null;
             }
         }
-
         return pl;
     }
 

@@ -9,13 +9,29 @@ public class ListaAutores {
             while(a.getSiguiente() != null){
                 a.getSiguiente();
             }
-
+            
             a.setSiguiente(new Autor(nautor));
         }
         else{
             primero = new Autor(nautor);
         }
     }
+    
+    public Autor obtenerAutorPorCancion(NodoCancion cancion) {
+        Autor aux = primero;
+        while (aux != null) {
+            NodoCancion nodoCancion = aux.getPrimera();
+            while (nodoCancion != null) {
+                if (nodoCancion.equals(cancion)) {
+                    return aux;
+                }
+                nodoCancion = nodoCancion.getSiguientexAutor();
+            }
+            aux = aux.getSiguiente();
+        }
+        return null;
+    }
+
 
     public boolean verificarAutor(String autor) {
         Autor aux = null;
@@ -28,7 +44,6 @@ public class ListaAutores {
         else{
             return false;
         }
-
         return aux.getNombre().equalsIgnoreCase(autor);
     }
 
@@ -43,7 +58,6 @@ public class ListaAutores {
                 return a;
             }
         }
-
         return a;
     }
 

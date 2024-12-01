@@ -39,8 +39,6 @@ public class Autor {
         else{
             primera = nueva;
         }
-
-
     }
 
     public void imprimirCanciones() {

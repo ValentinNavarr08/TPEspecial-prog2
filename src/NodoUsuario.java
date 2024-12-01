@@ -1,13 +1,13 @@
 import java.io.Serializable;
 
-public class NodoUsuario  implements Serializable {
+public class NodoUsuario implements Serializable {
 
     private String nombre;
     private String contrasena;
-    private transient NodoUsuario izquierda;
-    private transient NodoUsuario derecha;
-    private transient ListaSeguidos seguidas;
-    private transient ListaPropia propias;
+    private NodoUsuario izquierda;
+    private NodoUsuario derecha;
+    private ListaSeguidos seguidas;
+    private ListaPropia propias;
 
     public NodoUsuario(String nombre, String contrasena) {
         this.nombre = nombre;
@@ -41,6 +41,10 @@ public class NodoUsuario  implements Serializable {
     public ListaPropia getPropias() {
         return propias;
     }
+    
+    public void setPropias(ListaPropia nuevasPropias) {
+        this.propias = nuevasPropias;
+    }
 
     public String getContrasena() {
         return contrasena;
@@ -59,16 +63,12 @@ public class NodoUsuario  implements Serializable {
     }
 
     @Override
-    public String toString() {return this.nombre+" " +this.contrasena;}
+    public String toString() {
+        return this.nombre + " " + this.contrasena;
+    }
 
     public boolean tienePLPropia(String playlist) {
-        boolean resultado;
-        if(this.propias.obtenerPlaylist(playlist) != null){
-            resultado = true;
-        }
-        else resultado = false;
-
-        return resultado;
+        return this.propias.obtenerPlaylist(playlist) != null;
     }
 
     public void agegarPLPropia(String playlist) {

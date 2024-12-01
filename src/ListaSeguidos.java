@@ -10,7 +10,6 @@ public class ListaSeguidos {
 
     public void agregarSeguidas(NodoUsuario nuevo, Playlist playlist) {
         NodoSeguido insertar = new NodoSeguido(nuevo, playlist);
-
         if(primero == null) {
             primero = insertar;
         }
@@ -21,21 +20,9 @@ public class ListaSeguidos {
             }
             aux.setSiguiente(insertar);
         }
-
     }
-
-    /*public boolean tiene(Playlist plaSeguir) {
-        boolean tiene = false;
-        NodoSeguido aux = null;
-        if(primero != null) {
-            aux = primero;
-            while (aux != null && aux.getSiguiente() != null) {
-                if(aux.getPlSeguida().getNombre().equals(plaSeguir.getNombre())) {
-                    tiene = true;
-                }
-                aux = aux.getSiguiente();
-            }
-        }
-        return tiene;
-    }*/
+    
+    public NodoSeguido getPrimero() {
+        return primero;
+    }
 }

@@ -38,7 +38,7 @@ public class ArbolUsuarios {
                     this.cantNodos++;
                 }
             }
-
+            
             else if(n.getNombre().compareTo(nUsuarioNuevo) < 0) {
                 //si es mayor, uso la misma logica
                 if(n.getDerecha() != null) {
@@ -50,11 +50,10 @@ public class ArbolUsuarios {
                     this.cantNodos++;
                 }
             }
-
+            
         }
-
+        
         this.balancear();
-        //TODO: Balancear el arbol
     }
 
     private void balancear(){
@@ -69,7 +68,6 @@ public class ArbolUsuarios {
                 arr[index[0]++] = n;
                 llenararreglo(arr, n.getDerecha(), index);
         }
-
         return arr;
     }
 
@@ -77,13 +75,12 @@ public class ArbolUsuarios {
         if (inicio > fin) {
             return null;
         }
-
         int medio = (inicio + fin) / 2;
         NodoUsuario nodo = arr[medio];
-
+        
         nodo.setIzquierda(construirArbolBalanceado(arr, inicio, medio - 1));
         nodo.setDerecha(construirArbolBalanceado(arr, medio + 1, fin));
-
+        
         return nodo;
     }
 
@@ -131,7 +128,7 @@ public class ArbolUsuarios {
     }
 
     public void imprimirOrdenado(){
-         this.imprimirOrdRec(this.raiz);
+        this.imprimirOrdRec(this.raiz);
     }
 
     private void imprimirOrdRec(NodoUsuario n) {
@@ -144,25 +141,6 @@ public class ArbolUsuarios {
                 imprimirOrdRec(n.getDerecha());
             }
         }
-
-    }
-
-    public void serializarArbol(Archivos persistencia) {
-        this.serializarRec(this.raiz, persistencia);
-    }
-
-    private void serializarRec(NodoUsuario n, Archivos persistencia) {
-        if(n != null) {
-            if(n.getIzquierda() != null) {
-                this.serializarRec(n.getIzquierda(), persistencia);
-            }
-            persistencia.guardarUsuario(n);
-            if(n.getDerecha() != null) {
-                this.serializarRec(n.getDerecha(), persistencia);
-            }
-        }
-
     }
 
 }
-
