@@ -45,7 +45,7 @@ public class Autor {
         if(primera != null){
             NodoCancion aux =  this.primera;
             while(aux != null) {
-                System.out.println(aux);
+                System.out.println(aux.getNombre());
                 aux = aux.getSiguientexAutor();
             }
         }

@@ -10,47 +10,43 @@ import java.lang.ClassNotFoundException;
 
 public class Archivos {
 
-    private static final String ARCHIVO_USUARIOS = "/work/archivoUsuariosPRUEBA.txtLN";                               //"ArchUsuarios.ser";
-    private static final String ARCHIVO_CANCIONES = "/work/archivoCancionesPRUEBA.txtLN";                              //ArchCanciones.ser";
-    private static final String ARCHIVO_LISTAS_PROPIAS = "/work/archivoListasPropiasPRUEBA.txtLN";                         //"ArchListasPropias.ser";
-    private static final String ARCHIVO_LISTAS_SEGUIDAS = "/work/archivoLsitasSeguidasPRUEBA.txtLN";                        //"ArchListasSeguidas.ser";;
+    private static final String ARCHIVO_USUARIOS = "src/archivoUsuariosPRUEBA.txtLN";                               //"ArchUsuarios.ser";
+    private static final String ARCHIVO_CANCIONES = "src/archivoCancionesPRUEBA.txtLN";                              //ArchCanciones.ser";
+    private static final String ARCHIVO_LISTAS_PROPIAS = "src/archivoListasPropiasPRUEBA.txtLN";                         //"ArchListasPropias.ser";
+    private static final String ARCHIVO_LISTAS_SEGUIDAS = "src/archivoLsitasSeguidasPRUEBA.txtLN";                        //"ArchListasSeguidas.ser";;
 
-    private ArbolUsuarios arbUsuarios;
+    private ArbolUsuarios arbolUsuarios;
     private ArbolCanciones arbCanciones;
-    private ListaPropia listasPropias;
-    private ListaSeguidos listasSeguidos;
-    private ListaAutores listaAutores;
-    
-    public void guardarDatos() {
-        guardarUsuarios(arbUsuarios);
-        guardarCanciones(arbCanciones, listaAutores);
-        guardarListasPropias(arbUsuarios);
-        guardarListasSeguidas(arbUsuarios);
+    public void guardarDatos(ArbolUsuarios aU, ArbolCanciones aC, ListaAutores lA) {
+        guardarUsuarios(aU);
+        guardarCanciones(aC, lA);
+        guardarListasPropias(aU);
+        guardarListasSeguidas(aU);
     }
     
-    public void cargarDatos() {
+    public void cargarDatos(ArbolUsuarios aU, ArbolCanciones aC, ListaAutores lA) {
         // Cargar usuarios
         System.out.println("Cargando usuarios...");
-        arbUsuarios = cargarUsuarios();
+        arbolUsuarios = cargarUsuarios(aU);
         
         // Cargar canciones y lista de autores
         System.out.println("Cargando canciones...");
-        ListaAutores listaAutores = new ListaAutores();
-        arbCanciones = cargarCanciones(listaAutores);
+        ListaAutores listaAutores = lA;
+        arbCanciones = cargarCanciones(aC, listaAutores);
         
         // Cargar listas propias
         System.out.println("Cargando listas propias...");
-        cargarListasPropias(arbUsuarios, arbCanciones);
+        cargarListasPropias(aU, aC);
         
         // Cargar listas seguidas
         System.out.println("Cargando listas seguidas...");
-        cargarListasSeguidas(arbUsuarios);
+        cargarListasSeguidas(aU);
     }
 
 
-    private ArbolUsuarios cargarUsuarios() {
+    private ArbolUsuarios cargarUsuarios(ArbolUsuarios arbolUsuarios) {
         File archivo = new File(ARCHIVO_USUARIOS);
-        ArbolUsuarios arbol = new ArbolUsuarios();
+        ArbolUsuarios arbol = arbolUsuarios;
         
         if (archivo.exists()) {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
@@ -173,9 +169,9 @@ public class Archivos {
         }
     }
     
-    private ArbolCanciones cargarCanciones(ListaAutores listaAutores) {
+    private ArbolCanciones cargarCanciones(ArbolCanciones aC,ListaAutores listaAutores) {
         File archivo = new File(ARCHIVO_CANCIONES);
-        ArbolCanciones arbolCanciones = new ArbolCanciones();
+        ArbolCanciones arbolCanciones = aC;
         
         if (archivo.exists()) {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
@@ -236,7 +232,7 @@ public class Archivos {
             
             // Escribir el nodo serializable en el archivo
             System.out.println("Guardando usuarios...");
-            System.out.println("Cantidad de usuarios a guardar: " + contarNodos(arbUsuarios.getRaiz()));
+            System.out.println("Cantidad de usuarios a guardar: " + contarNodos(arbolUsuarios.getRaiz()));
             oos.writeObject(nodoSerializado);
             
             // Recorrer subárbol derecho

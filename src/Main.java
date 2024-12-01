@@ -20,7 +20,7 @@ public class Main {
          usuarioLogeado = null;
          
          Archivos archivos = new Archivos();
-         archivos.cargarDatos();
+         archivos.cargarDatos(arbolUsuarios, arbolCanciones, listaAutores);
          
         int opcion;
         boolean seguir = true;
@@ -36,15 +36,18 @@ public class Main {
                 case 1: loguearUsuario();break;
                 case 2: nuevoUsuario();break;
                 case 3: verUsuariosExistentes();break;
-                case 4: archivos.guardarDatos();
+                case 4: archivos.guardarDatos(arbolUsuarios, arbolCanciones, listaAutores);
                     System.exit(0); break;
                 default: System.out.println("Algo salió mal");break;
             }
             if (comienzaNuevaInteraccion()){
                 seguir = true;
             }
-            else seguir = false;
+            else {
+                seguir = false;
+            }
         }
+        archivos.guardarDatos(arbolUsuarios, arbolCanciones, listaAutores);
     }
     public static boolean comienzaNuevaInteraccion(){
         System.out.println("-------------------------------");
@@ -126,7 +129,8 @@ public class Main {
         String password = obtenerStringValido();
         
         NodoUsuario usuario = arbolUsuarios.buscarUsuario(nombre);
-        
+        System.out.println(usuario.getSeguidas().getPrimero().getUsuario().getNombre());
+
         if (usuario != null && usuario.getContrasena().equals(password)) {
             usuarioLogeado = usuario;
             System.out.println("Usted se ha logueado correctamente como:"+nombre);
