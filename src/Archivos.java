@@ -1,5 +1,3 @@
-//hay contador en la serializacion de nodos usuarios para ver cuantos hay al momento de guardarlos (prueba)
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -14,43 +12,39 @@ public class Archivos {
     private static final String ARCHIVO_CANCIONES = "src/archivoCancionesPRUEBA.txtLN";                              //ArchCanciones.ser";
     private static final String ARCHIVO_LISTAS_PROPIAS = "src/archivoListasPropiasPRUEBA.txtLN";                         //"ArchListasPropias.ser";
     private static final String ARCHIVO_LISTAS_SEGUIDAS = "src/archivoLsitasSeguidasPRUEBA.txtLN";                        //"ArchListasSeguidas.ser";;
-
-    private ArbolUsuarios arbolUsuarios;
-    private ArbolCanciones arbCanciones;
-    public void guardarDatos(ArbolUsuarios aU, ArbolCanciones aC, ListaAutores lA) {
-        guardarUsuarios(aU);
-        guardarCanciones(aC, lA);
-        guardarListasPropias(aU);
-        guardarListasSeguidas(aU);
+    
+    public void guardarDatos(ArbolUsuarios arbolUsuarios, ArbolCanciones arbolCanciones, ListaAutores listaAutores) {
+        guardarUsuarios(arbolUsuarios);
+        guardarCanciones(arbolCanciones, listaAutores);
+        guardarListasPropias(arbolUsuarios);
+        guardarListasSeguidas(arbolUsuarios);
     }
     
-    public void cargarDatos(ArbolUsuarios aU, ArbolCanciones aC, ListaAutores lA) {
+    public void cargarDatos(ArbolUsuarios arbolUsuarios,ArbolCanciones arbolCanciones,ListaAutores listaAutores) {
         // Cargar usuarios
         System.out.println("Cargando usuarios...");
-        arbolUsuarios = cargarUsuarios(aU);
+        arbolUsuarios = cargarUsuarios(arbolUsuarios);
         
         // Cargar canciones y lista de autores
         System.out.println("Cargando canciones...");
-        ListaAutores listaAutores = lA;
-        arbCanciones = cargarCanciones(aC, listaAutores);
+        
+        arbolCanciones = cargarCanciones(listaAutores, arbolCanciones);
         
         // Cargar listas propias
         System.out.println("Cargando listas propias...");
-        cargarListasPropias(aU, aC);
+        cargarListasPropias(arbolUsuarios, arbolCanciones);
         
         // Cargar listas seguidas
         System.out.println("Cargando listas seguidas...");
-        cargarListasSeguidas(aU);
+        cargarListasSeguidas(arbolUsuarios);
     }
 
 
-    private ArbolUsuarios cargarUsuarios(ArbolUsuarios arbolUsuarios) {
+    private ArbolUsuarios cargarUsuarios(ArbolUsuarios arbol) {
         File archivo = new File(ARCHIVO_USUARIOS);
-        ArbolUsuarios arbol = arbolUsuarios;
         
         if (archivo.exists()) {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
-                System.out.println("Cargando usuarios desde archivo...");
                 while (true) {
                     try {
                         // Deserializar como NodoUsuarioSerializable
@@ -132,7 +126,6 @@ public class Archivos {
         
         if (archivo.exists()) {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
-                System.out.println("Cargando listas seguidas desde archivo...");
                 
                 while (true) {
                     try {
@@ -169,9 +162,8 @@ public class Archivos {
         }
     }
     
-    private ArbolCanciones cargarCanciones(ArbolCanciones aC,ListaAutores listaAutores) {
+    private ArbolCanciones cargarCanciones(ListaAutores listaAutores, ArbolCanciones arbolCanciones) {
         File archivo = new File(ARCHIVO_CANCIONES);
-        ArbolCanciones arbolCanciones = aC;
         
         if (archivo.exists()) {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
@@ -211,8 +203,6 @@ public class Archivos {
         File archivo = new File(ARCHIVO_USUARIOS);
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(archivo))) {
             // Recorrer el árbol y guardar los nodos serializables
-            System.out.println("Guardando usuarios...");
-            System.out.println("Cantidad de usuarios a guardar: " + contarNodos(arbUsuarios.getRaiz()));
             generarSerializables(arbUsuarios.getRaiz(), oos);
             System.out.println("Usuarios guardados exitosamente.");
         } catch (IOException e) {
@@ -231,21 +221,13 @@ public class Archivos {
             NodoUsuarioSerializable nodoSerializado = new NodoUsuarioSerializable(nodo.getNombre(), nodo.getContrasena());
             
             // Escribir el nodo serializable en el archivo
-            System.out.println("Guardando usuarios...");
-            System.out.println("Cantidad de usuarios a guardar: " + contarNodos(arbolUsuarios.getRaiz()));
             oos.writeObject(nodoSerializado);
             
             // Recorrer subárbol derecho
             generarSerializables(nodo.getDerecha(), oos);
         }
     }
-    //LO ESTABA USANDO PARA VER SI LA SERIALIZACION FUNCIONABA CORRECTAMENTE
-    public int contarNodos(NodoUsuario nodo) {
-        if (nodo == null) return 0;
-        return 1 + contarNodos(nodo.getIzquierda()) + contarNodos(nodo.getDerecha());
-    }
-
-
+    
     private void guardarCanciones(ArbolCanciones arbCanciones, ListaAutores listaAutores) {
         File archivo = new File(ARCHIVO_CANCIONES);
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(archivo))) {
@@ -312,16 +294,16 @@ public class Archivos {
     }
 
     private void guardarListasSeguidas(ArbolUsuarios arbolUsuarios) {
-    File archivo = new File(ARCHIVO_LISTAS_SEGUIDAS);
-
-    try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(archivo))) {
-        guardarListasSeguidasRec(arbolUsuarios.getRaiz(), oos);
-        System.out.println("Listas seguidas guardadas exitosamente.");
-    } catch (IOException e) {
-        System.err.println("Error al guardar el archivo de listas seguidas.");
-        e.printStackTrace();
+        File archivo = new File(ARCHIVO_LISTAS_SEGUIDAS);
+        
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(archivo))) {
+            guardarListasSeguidasRec(arbolUsuarios.getRaiz(), oos);
+            System.out.println("Listas seguidas guardadas exitosamente.");
+        } catch (IOException e) {
+            System.err.println("Error al guardar el archivo de listas seguidas.");
+            e.printStackTrace();
+        }
     }
-}
 
     private void guardarListasSeguidasRec(NodoUsuario nodo, ObjectOutputStream oos) throws IOException {
         if (nodo != null) {
@@ -333,23 +315,13 @@ public class Archivos {
                 
                 while (seguido != null) {
                     RegistroListaSeguidas registro = new RegistroListaSeguidas(nodo.getNombre(), seguido.getUsuario().getNombre(), seguido.getPlSeguida().getNombre());
-                oos.writeObject(registro);
-                seguido = seguido.getSiguiente();
+                    oos.writeObject(registro);
+                    seguido = seguido.getSiguiente();
+                }
             }
-        }
         // Recorrer subárbol izquierdo y derecho
         guardarListasSeguidasRec(nodo.getIzquierda(), oos);
         guardarListasSeguidasRec(nodo.getDerecha(), oos);
-    }
-}
-    
-    private void crearArchivoVacio(String nombreArchivo, Object objetoInicial) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(nombreArchivo))) {
-            oos.writeObject(objetoInicial);
-            System.out.println("Archivo guardado exitosamente.");
-        } catch (IOException e) {
-            System.err.println("Error al crear el archivo: " + nombreArchivo);
-            e.printStackTrace();
         }
     }
 }

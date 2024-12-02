@@ -1,6 +1,4 @@
-import java.io.Serializable;
-
-public class NodoCancion implements Serializable {
+public class NodoCancion {
 
     private String nombre;
     private NodoCancion izquierda;

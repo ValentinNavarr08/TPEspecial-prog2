@@ -45,9 +45,9 @@ public class Main {
             }
             else {
                 seguir = false;
+                archivos.guardarDatos(arbolUsuarios, arbolCanciones, listaAutores);
             }
         }
-        archivos.guardarDatos(arbolUsuarios, arbolCanciones, listaAutores);
     }
     public static boolean comienzaNuevaInteraccion(){
         System.out.println("-------------------------------");
@@ -129,8 +129,7 @@ public class Main {
         String password = obtenerStringValido();
         
         NodoUsuario usuario = arbolUsuarios.buscarUsuario(nombre);
-        System.out.println(usuario.getSeguidas().getPrimero().getUsuario().getNombre());
-
+        
         if (usuario != null && usuario.getContrasena().equals(password)) {
             usuarioLogeado = usuario;
             System.out.println("Usted se ha logueado correctamente como:"+nombre);
@@ -354,8 +353,10 @@ public class Main {
         NodoUsuario aseguir = arbolUsuarios.buscarUsuario(seguirNombre);
         
         if(aseguir != null) {
-            System.out.println("Estas son todas las listas del usuario:" + aseguir.getNombre());
+            System.out.println("Estas son todas las listas PROPIAS del usuario:" + aseguir.getNombre());
             aseguir.imprimirPLPropias();
+            System.out.println("Estas son todas las listas SEGUIDAS del usuario:" + aseguir.getNombre());
+            aseguir.imprimirPLseguidas();
             System.out.println("Ingrese el nombre de la Playlist:");
             String playlist = obtenerStringValido();
             
